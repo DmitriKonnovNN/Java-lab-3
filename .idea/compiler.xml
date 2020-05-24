@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Lab3" options="" />
+      <module name="Lab3" options="--enable-preview" />
     </option>
   </component>
 </project>
