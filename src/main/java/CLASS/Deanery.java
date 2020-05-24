@@ -2,7 +2,7 @@ package CLASS;
 
 import INTERFACES.*;
 
-import java.nio.file.FileAlreadyExistsException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 
 import org.json.*;
 
-import javax.xml.crypto.NoSuchMechanismException;
 
 
 public class Deanery implements IDeanery {
@@ -22,7 +21,7 @@ public class Deanery implements IDeanery {
         registerFromFileRandomly = new RegisterFromSourceTXTRandomly(this);
 
     }
-    public Deanery(String inputFileFormat)  {
+    public Deanery(String inputFileFormat) throws NoSuchFormatSupportedException {
         GroupStudentTable = new HashMap<>();
         switch (inputFileFormat) {
             case "txt" : case ".txt" : case "TXT" :
@@ -32,7 +31,7 @@ public class Deanery implements IDeanery {
             break;
             default : {registerFromFileRandomly = null;
                 try {
-                    throw new NoSuchMechanismException("Format " +inputFileFormat+ " hasn't been implemented yet");
+                    throw new NoSuchFormatSupportedException("Format " +inputFileFormat+ " hasn't been implemented yet");
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -88,7 +87,7 @@ public class Deanery implements IDeanery {
     }
     @Override
     public void register (String groupName, String studentName) {
-        int id = idGenerator.getNextId();
+
         IGroup [] tempGroup = new IGroup[1];
         boolean [] equalNameFound = new boolean[]{false};
         GroupStudentTable.forEach((group,list)->{
@@ -112,7 +111,7 @@ public class Deanery implements IDeanery {
         }catch (Exception e){e.printStackTrace();}
 
         if (!equalNameFound[0] && tempGroup[0]!= null) {
-            register(groupName,new Student(studentName, id, tempGroup[0])); }
+            register(groupName,new Student(studentName, idGenerator.getNextId(), tempGroup[0])); }
 
     }
 

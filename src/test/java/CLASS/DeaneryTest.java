@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.NoSuchMechanismException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,10 +19,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class DeaneryTest {
 
     static Deanery deanery1 = new Deanery ();
-    static Deanery deanery2 = new Deanery("JSON");
-    static Deanery deanery3 = new Deanery(".txt");
+    static Deanery deanery2;
+    static Deanery deanery3;
 
-
+    static {
+        try {
+            deanery2 = new Deanery("JSON");
+            deanery3 = new Deanery(".txt");
+        } catch (NoSuchFormatSupportedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     static final String FIO1 = "Тестовый Студент 1";
@@ -36,9 +43,44 @@ class DeaneryTest {
     static final String GROUPNAME5 = "Тестовая группа 5";
     static final String GROUPNAME6 = "Тестовая группа 6";
 
+    @BeforeAll
+    static void createGroup() {
+        try {deanery1.createGroup(GROUPNAME1);
+            deanery1.createGroup(GROUPNAME2);
+            deanery1.createGroup(GROUPNAME3);
+            deanery1.createGroup(GROUPNAME5);
+        } catch (GroupAlreadyExistsException e){e.printStackTrace();}
+
+        ArrayList<String> grNames = new ArrayList<>();
+        deanery1.getGroupList().forEach(group -> grNames.add(group.getGroupName()));
+        assertNotEquals(true, grNames.contains(GROUPNAME4));
+
+    }
+
+    @BeforeEach
+    void registerStudentsFromFileRandomly() {
+
+        deanery1.registerStudentsFromFileRandomly(null);
+        assertNotNull(deanery1.getGroupList());
+        deanery1.getGroupList().forEach( group -> assertTrue(group.getGroupName().startsWith("Тестовая группа")));
+
+        deanery1.getGroupList().forEach(group -> group.getStudentList().forEach(student -> {
+            assertNotNull(student.getName());
+            assertNotEquals(0, student.getId());} ));
+    }
+    @AfterAll
+    static void expelBadStudents() {
+        int badMark = 2;
+        int [] counter = {0};
+        for (int i = 0; i < 20; i++){deanery1.setOneMarkForEachStudentInEachGroup(2);}
+        deanery1.getGroupStudentTable().forEach((group, studentArrayList) -> counter[0] += studentArrayList.size());
+        assertEquals(counter[0], deanery1.expelBadStudents().size()-1);
+
+    }
+
     @Test
     void constructorTest(){
-        assertThrows(NoSuchMechanismException.class, ()-> new Deanery("XML"));
+        assertThrows(NoSuchFormatSupportedException.class, ()-> new Deanery("XML"));
             }
 
 
@@ -56,40 +98,15 @@ class DeaneryTest {
        deanery1.setRegisterFromFileRandomly(sourceTXT);
        assertEquals(deanery1.registerFromFileRandomly, sourceTXT);
 
-
-
     }
-   @BeforeAll
-   static void createGroup() {
-        try {deanery1.createGroup(GROUPNAME1);
-            deanery1.createGroup(GROUPNAME2);
-            deanery1.createGroup(GROUPNAME3);
-            deanery1.createGroup(GROUPNAME5);
-        } catch (GroupAlreadyExistsException e){e.printStackTrace();}
 
-      ArrayList<String> grNames = new ArrayList<>();
-      deanery1.getGroupList().forEach(group -> grNames.add(group.getGroupName()));
-      assertNotEquals(true, grNames.contains(GROUPNAME4));
-
-
-   }
 
    @Test
    void createExistingGroup(){
         assertThrows(GroupAlreadyExistsException.class, ()-> deanery1.createGroup(GROUPNAME1));
    }
 
-    @BeforeEach
-    void registerStudentsFromFileRandomly() {
 
-       deanery1.registerStudentsFromFileRandomly(null);
-       assertNotNull(deanery1.getGroupList());
-       deanery1.getGroupList().forEach( group -> assertTrue(group.getGroupName().startsWith("Тестовая группа")));
-
-       deanery1.getGroupList().forEach(group -> group.getStudentList().forEach(student -> {
-          assertNotNull(student.getName());
-       assertNotEquals(0, student.getId());} ));
-    }
 
 
 
@@ -124,15 +141,7 @@ class DeaneryTest {
     }
 
 
-    @AfterAll
-    static void expelBadStudents() {
-        int badMark = 2;
-        int [] counter = {0};
-        for (int i = 0; i < 20; i++){deanery1.setOneMarkForEachStudentInEachGroup(2);}
-        deanery1.getGroupStudentTable().forEach((group, studentArrayList) -> counter[0] += studentArrayList.size());
-        assertEquals(counter[0], deanery1.expelBadStudents().size()-1);
 
-    }
 
 
     @Test
