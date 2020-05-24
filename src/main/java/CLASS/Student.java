@@ -94,7 +94,8 @@ public class Student implements IStudent {
     public boolean equals (Object o) {
        if (this == o) return true; // if both invoking object and passed object point to the same memory location.
        if (o == null) return false;
-       if (!(o instanceof Student student)) return false; // new syntax' alive!
+       if (!(o instanceof Student )) return false; // new syntax' alive!
+        var student = (Student)o;
        return id == student.id &&
                name.equals(student.name) &&
                Objects.equals(group, student.group);

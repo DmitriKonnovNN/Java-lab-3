@@ -199,7 +199,8 @@ class DeaneryTest {
 
         Object expectedObj = deanery1.getListOfGroupsStudentsFieldsAsJSON();
         assertTrue(expectedObj instanceof JSONObject);
-        if (expectedObj instanceof JSONObject outputObj){
+        if (expectedObj instanceof JSONObject ){
+            var outputObj = (JSONObject)expectedObj;
             deanery1.getGroupStudentTable().forEach((expgroup, expstudent)->{
                 if (expNumOfGroups[0]>0  ){
                     if (expectedNumberOfStudents[0]>0) {

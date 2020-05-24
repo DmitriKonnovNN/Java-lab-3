@@ -169,7 +169,8 @@ public class Group implements IGroup {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (!(o instanceof Group group)) return false;
+        if (!(o instanceof Group)) return false;
+        var group = (Group) o;
         return GroupName.equals(group.GroupName) &&
                 deanery.equals(group.deanery);
     }

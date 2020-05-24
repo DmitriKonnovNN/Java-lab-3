@@ -17,7 +17,8 @@ public class RegisterFromTXTRandomly implements IRegisterFromFileRandomly {
 
     @Override
     public void registerFromFileRandomly(Object object) {
-        if (object instanceof File file) {
+        if (object instanceof File ) {
+            var file = (File)object;
 
         int groupNumber = deanery.getGroupStudentTable().size();
         try {

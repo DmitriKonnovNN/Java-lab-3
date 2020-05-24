@@ -12,7 +12,8 @@ public class RegisterFromJSONRandomly implements IRegisterFromFileRandomly {
     }
     @Override
     public void registerFromFileRandomly(Object object) {
-        if (object instanceof JSONObject jsonobj) {
+        if (object instanceof JSONObject ) {
+            var jsonobj = (JSONObject)object;
             int studentsNumber = jsonobj.getInt("количество студентов");
             ArrayList<IGroup> tempGroupList = deanery.getGroupList();
             int groupNumber = deanery.getGroupStudentTable().size();
