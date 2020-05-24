@@ -36,16 +36,18 @@ public class RegisterFromTXTRandomly implements IRegisterFromFileRandomly {
                     String[] FIOarray = line.split("\\s+");
                     JSONObject student = new JSONObject();
                     switch (FIOarray.length) {
-                        case 3 -> {
+                        case 3 : {
                             student.put("фамилия", FIOarray[0]);
                             student.put("имя", FIOarray[1]);
                             student.put("отчество", FIOarray[2]);
+                            break;
                         }
-                        case 2 -> {
+                        case 2 : {
                             student.put("фамилия", FIOarray[0]);
                             student.put("имя", FIOarray[1]);
+                            break;
                         }
-                        default -> student.put("имя", FIOarray);
+                        default : student.put("имя", FIOarray);
                     }
                     studentlist.put("студент " + studentCounter, student);
 

@@ -25,9 +25,12 @@ public class Deanery implements IDeanery {
     public Deanery(String inputFileFormat)  {
         GroupStudentTable = new HashMap<>();
         switch (inputFileFormat) {
-            case "txt", ".txt", "TXT" -> registerFromFileRandomly = new RegisterFromTXTRandomly(this);
-            case "JSON", ".json", "json" -> registerFromFileRandomly = new RegisterFromJSONRandomly(this);
-            default -> {registerFromFileRandomly = null;
+            case "txt" : case ".txt" : case "TXT" :
+                registerFromFileRandomly = new RegisterFromTXTRandomly(this);
+                break;
+            case "JSON" : case ".json" : case "json" : registerFromFileRandomly = new RegisterFromJSONRandomly(this);
+            break;
+            default : {registerFromFileRandomly = null;
                 try {
                     throw new NoSuchMechanismException("Format " +inputFileFormat+ " hasn't been implemented yet");
                 } catch (Exception e) {
